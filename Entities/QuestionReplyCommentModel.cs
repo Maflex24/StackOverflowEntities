@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflowEntities.Entities
 {
-    public abstract class QuestionModel
+    public abstract class QuestionReplyCommentModel
     {
         public Guid Id { get; set; }
         public string Content { get; set; }

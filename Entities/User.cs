@@ -23,6 +23,10 @@ namespace StackOverflowEntities.Entities
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(30);
+
             builder.HasMany(c => c.Comments)
                 .WithOne(c => c.Author)
                 .HasForeignKey(c => c.AuthorId);

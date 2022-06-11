@@ -35,7 +35,7 @@ namespace StackOverflowEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionModels",
+                name: "QuestionsRepliesComments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -55,17 +55,17 @@ namespace StackOverflowEntities.Migrations
                     table.ForeignKey(
                         name: "FK_QuestionModels_QuestionModels_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "QuestionModels",
+                        principalTable: "QuestionsRepliesComments",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuestionModels_QuestionModels_Reply_QuestionId",
                         column: x => x.Reply_QuestionId,
-                        principalTable: "QuestionModels",
+                        principalTable: "QuestionsRepliesComments",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuestionModels_QuestionModels_ReplyId",
                         column: x => x.ReplyId,
-                        principalTable: "QuestionModels",
+                        principalTable: "QuestionsRepliesComments",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuestionModels_Users_AuthorId",
@@ -88,7 +88,7 @@ namespace StackOverflowEntities.Migrations
                     table.ForeignKey(
                         name: "FK_QuestionTag_QuestionModels_QuestionsId",
                         column: x => x.QuestionsId,
-                        principalTable: "QuestionModels",
+                        principalTable: "QuestionsRepliesComments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -101,22 +101,22 @@ namespace StackOverflowEntities.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionModels_AuthorId",
-                table: "QuestionModels",
+                table: "QuestionsRepliesComments",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionModels_QuestionId",
-                table: "QuestionModels",
+                table: "QuestionsRepliesComments",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionModels_Reply_QuestionId",
-                table: "QuestionModels",
+                table: "QuestionsRepliesComments",
                 column: "Reply_QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionModels_ReplyId",
-                table: "QuestionModels",
+                table: "QuestionsRepliesComments",
                 column: "ReplyId");
 
             migrationBuilder.CreateIndex(
@@ -131,7 +131,7 @@ namespace StackOverflowEntities.Migrations
                 name: "QuestionTag");
 
             migrationBuilder.DropTable(
-                name: "QuestionModels");
+                name: "QuestionsRepliesComments");
 
             migrationBuilder.DropTable(
                 name: "Tags");

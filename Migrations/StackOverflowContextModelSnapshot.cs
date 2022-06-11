@@ -34,7 +34,22 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("QuestionTag");
+                    b.ToTable("QuestionTag", (string)null);
+                });
+
+            modelBuilder.Entity("StackOverflowEntities.Entities.DiscriminatorView", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToView("View_Discriminator");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.QuestionModel", b =>
@@ -47,6 +62,7 @@ namespace StackOverflowEntities.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
@@ -64,7 +80,7 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionModels");
+                    b.ToTable("QuestionsRepliesComments", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionModel");
                 });
@@ -78,11 +94,60 @@ namespace StackOverflowEntities.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "C#"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Javascript"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "DependencyInjection"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = ".Net"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = ".NetCore"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = ".Asp.NetCore"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "WebAPI"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "EntityFramework"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "SQL"
+                        });
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.User", b =>
@@ -92,11 +157,13 @@ namespace StackOverflowEntities.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Comment", b =>
@@ -112,8 +179,6 @@ namespace StackOverflowEntities.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("ReplyId");
 
                     b.HasDiscriminator().HasValue("Comment");
                 });
@@ -131,7 +196,7 @@ namespace StackOverflowEntities.Migrations
                 {
                     b.HasBaseType("StackOverflowEntities.Entities.QuestionModel");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Reply_QuestionId");
 
@@ -165,15 +230,21 @@ namespace StackOverflowEntities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StackOverflowEntities.Entities.Question", null)
+                    b.HasOne("StackOverflowEntities.Entities.Reply", "Reply")
+                        .WithMany("Comments")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("StackOverflowEntities.Entities.Question", "Question")
                         .WithMany("Comments")
                         .HasForeignKey("QuestionId");
 
-                    b.HasOne("StackOverflowEntities.Entities.Reply", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ReplyId");
-
                     b.Navigation("Author");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Reply");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Question", b =>
@@ -195,11 +266,15 @@ namespace StackOverflowEntities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StackOverflowEntities.Entities.Question", null)
+                    b.HasOne("StackOverflowEntities.Entities.Question", "Question")
                         .WithMany("Replies")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.User", b =>

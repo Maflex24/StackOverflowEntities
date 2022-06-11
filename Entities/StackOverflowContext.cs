@@ -14,17 +14,23 @@ namespace StackOverflowEntities.Entities
 
         }
 
-        public DbSet<QuestionModel> QuestionModels { get; set; }
+        public DbSet<QuestionReplyCommentModel> QuestionsRepliesComments { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Comment> Comments{ get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<DiscriminatorView> DiscriminatorViews { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
+            modelBuilder.Entity<DiscriminatorView>(e =>
+            {
+                e.ToView("View_Discriminator");
+            });
         }
     }
 }

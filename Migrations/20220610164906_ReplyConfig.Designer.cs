@@ -12,8 +12,8 @@ using StackOverflowEntities.Entities;
 namespace StackOverflowEntities.Migrations
 {
     [DbContext(typeof(StackOverflowContext))]
-    [Migration("20220610160024_Init")]
-    partial class Init
+    [Migration("20220610164906_ReplyConfig")]
+    partial class ReplyConfig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,7 @@ namespace StackOverflowEntities.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
@@ -80,11 +81,60 @@ namespace StackOverflowEntities.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "C#"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Javascript"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "DependencyInjection"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = ".Net"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = ".NetCore"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = ".Asp.NetCore"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "WebAPI"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "EntityFramework"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "SQL"
+                        });
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.User", b =>
@@ -94,7 +144,9 @@ namespace StackOverflowEntities.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -133,7 +185,7 @@ namespace StackOverflowEntities.Migrations
                 {
                     b.HasBaseType("StackOverflowEntities.Entities.QuestionModel");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Reply_QuestionId");
 
@@ -197,11 +249,15 @@ namespace StackOverflowEntities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StackOverflowEntities.Entities.Question", null)
+                    b.HasOne("StackOverflowEntities.Entities.Question", "Question")
                         .WithMany("Replies")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.User", b =>
