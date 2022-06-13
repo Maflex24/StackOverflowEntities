@@ -39,6 +39,7 @@ namespace StackOverflowEntities.Entities
             var tagMaxIndex = tags.Count - 1;
 
             var questionGenerator = new Faker<Question>()
+                .RuleFor(q => q.Title, f => f.Lorem.Sentence(15).Substring(0, 35) + "...?")
                 .RuleFor(q => q.Content, f => f.Lorem.Paragraphs(1, 25, "\n\n"))
                 .RuleFor(q => q.Rating, f => f.Random.Number(-5, 15))
                 .RuleFor(q => q.Author, f => users[f.Random.Number(users.Count - 1)])
