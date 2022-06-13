@@ -39,6 +39,7 @@ app.MapGet("question", async (StackOverflowContext db, [FromQueryAttribute] Guid
         .Include(q => q.Replies)
         .Include(q => q.Comments)
         .Include(q => q.Tags)
+        .Select(q => new { Id = q.Id, Title = q.Title, Author = q.Author.Name, Date = q.Created.ToString("dd-MM-yyyy"), Rating = q.Rating, Tags = q.Tags, Question = q.Content, Replies = q.Replies, Comments = q.Comments})
         .FirstAsync(q => q.Id == questionId);
 
     return result;
@@ -49,7 +50,7 @@ app.MapGet("questions", async (StackOverflowContext db) =>
     var results = await db.Questions
         .AsNoTracking()
         .Include(a => a.Author)
-        .Select(q => new {Author = q.Author.Name, Question = q.Content, Date = q.Created.ToString("dd-MM-yyyy"), Rating = q.Rating, Replies = q.Replies})
+        .Select(q => new {Id = q.Id, Title = q.Title, Author = q.Author.Name, Date = q.Created.ToString("dd-MM-yyyy"), Rating = q.Rating, Question = q.Content})
         .ToListAsync();
 
     return results;
