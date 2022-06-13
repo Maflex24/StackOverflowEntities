@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackOverflowEntities.Entities;
-using StackOverflowEntities.Entities.Dtos;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -126,6 +125,20 @@ app.MapPost("users", async (StackOverflowContext db, string userName) =>
 
     return newUser;
 });
+
+
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetService<StackOverflowContext>();
+
+if (!dbContext.Tags.Any())
+{
+    Tag.TagsSeed(dbContext);
+    var users = await DataGenerator.UsersSeed(dbContext);
+    var questions = await DataGenerator.QuestionsSeed(dbContext, users);
+    var replies = await DataGenerator.ReplySeed(dbContext, users, questions);
+    DataGenerator.CommentsSeed(dbContext);
+}
+
 
 app.Run();
 

@@ -14,7 +14,27 @@ namespace StackOverflowEntities.Entities
         public string Name { get; set; }
 
         public List<Question> Questions { get; set; }
+
+        public static async void TagsSeed(StackOverflowContext db)
+        {
+            var tags = new List<Tag>()
+            {
+                new Tag {Name = "C#"},
+                new Tag {Name = "Javascript"},
+                new Tag {Name = "DependencyInjection"},
+                new Tag {Name = ".Net"},
+                new Tag {Name = ".NetCore"},
+                new Tag {Name = ".Asp.NetCore"},
+                new Tag {Name = "WebAPI"},
+                new Tag {Name = "EntityFramework"},
+                new Tag {Name = "SQL"}
+            };
+
+            await db.Tags.AddRangeAsync(tags);
+            await db.SaveChangesAsync();
+        }
     }
+
 
     public class TagConfiguration : IEntityTypeConfiguration<Tag>
     {
@@ -26,18 +46,6 @@ namespace StackOverflowEntities.Entities
             builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(25);
-
-            builder.HasData(
-                new Tag{Id = 1, Name = "C#"},
-                new Tag{Id = 2, Name = "Javascript"},
-                new Tag{Id = 3, Name = "DependencyInjection"},
-                new Tag{Id = 4, Name = ".Net"},
-                new Tag{Id = 5, Name = ".NetCore" },
-                new Tag{Id = 6, Name = ".Asp.NetCore" },
-                new Tag{Id = 7, Name = "WebAPI" },
-                new Tag{Id = 8, Name = "EntityFramework" },
-                new Tag{Id = 9, Name = "SQL" }
-            );
         }
     }
 }
