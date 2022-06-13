@@ -20,7 +20,7 @@ namespace StackOverflowEntities.Entities
     {
         public void Configure(EntityTypeBuilder<Question> builder)
         {
-            builder.Property(q => q.Title).HasMaxLength(40).IsRequired();
+            builder.Property(q => q.Title).HasMaxLength(80).IsRequired();
         }
     }
 }
