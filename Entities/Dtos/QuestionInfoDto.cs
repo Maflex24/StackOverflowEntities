@@ -14,6 +14,7 @@ namespace StackOverflowEntities.Entities.Dtos
         public int Replies { get; set; }
         public int Comments { get; set; }
         public int Rating { get; set; }
+        public List<Tag> Tags { get; set; }
 
     }
 }
