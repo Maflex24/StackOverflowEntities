@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace StackOverflowEntities.Entities
 {
-    public class Reply : QuestionReplyCommentModel
+    public class Reply : QuestionModel
     {
         public List<Comment>? Comments { get; set; } = new List<Comment>();
         public Guid QuestionId { get; set; }

@@ -34,7 +34,7 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("QuestionTag", (string)null);
+                    b.ToTable("QuestionTag");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.DiscriminatorView", b =>
@@ -43,7 +43,7 @@ namespace StackOverflowEntities.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Value")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -80,7 +80,7 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionsRepliesComments", (string)null);
+                    b.ToTable("QuestionModels");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionModel");
                 });
@@ -100,54 +100,7 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "C#"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Javascript"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "DependencyInjection"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = ".Net"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = ".NetCore"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = ".Asp.NetCore"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "WebAPI"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "EntityFramework"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "SQL"
-                        });
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.User", b =>
@@ -163,7 +116,7 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Comment", b =>

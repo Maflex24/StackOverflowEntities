@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace StackOverflowEntities.Entities
 {
-    public class Question : QuestionReplyCommentModel
+    public class Question : QuestionModel
     {
         public List<Tag>? Tags { get; set; } = new List<Tag>();
         public List<Comment>? Comments { get; set; } = new List<Comment>();

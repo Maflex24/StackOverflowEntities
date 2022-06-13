@@ -14,7 +14,7 @@ namespace StackOverflowEntities.Entities
 
         }
 
-        public DbSet<QuestionReplyCommentModel> QuestionModels { get; set; }
+        public DbSet<QuestionModel> QuestionModels { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Comment> Comments{ get; set; }
         public DbSet<Reply> Replies { get; set; }

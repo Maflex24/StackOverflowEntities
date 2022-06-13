@@ -33,12 +33,17 @@ namespace StackOverflowEntities.Entities
         public static async Task<List<Question>> QuestionsSeed(StackOverflowContext dbContext, List<User> users)
         {
             Randomizer.Seed = new Random(1024);
+            var tags = await dbContext.Tags
+                .ToListAsync();
+
+            var tagMaxIndex = tags.Count - 1;
 
             var questionGenerator = new Faker<Question>()
                 .RuleFor(q => q.Content, f => f.Lorem.Paragraphs(1, 25, "\n\n"))
                 .RuleFor(q => q.Rating, f => f.Random.Number(-5, 15))
                 .RuleFor(q => q.Author, f => users[f.Random.Number(users.Count - 1)])
-                .RuleFor(q => q.Created, f => f.Date.Past());
+                .RuleFor(q => q.Created, f => f.Date.Past())
+                .RuleFor(q => q.Tags, f => f.Random.ListItems(tags));
 
             var questions = questionGenerator.Generate(500);
 
@@ -55,8 +60,8 @@ namespace StackOverflowEntities.Entities
             var replyGenerator = new Faker<Reply>()
                 .RuleFor(r => r.Content, f => f.Lorem.Paragraphs(1, 15, "\n\n"))
                 .RuleFor(r => r.Rating, f => f.Random.Number(-5, 15))
-                .RuleFor(r => r.Author, f => users[f.Random.Number(users.Count - 1)])
-                .RuleFor(r => r.Question, f => questions[f.Random.Number(questions.Count - 1)])
+                .RuleFor(r => r.Author, f => f.Random.ListItem(users))
+                .RuleFor(r => r.Question, f => f.Random.ListItem(questions))
                 .RuleFor(r => r.Created, DateTime.Now);
 
             var replies = replyGenerator.Generate(1000);
@@ -85,8 +90,8 @@ namespace StackOverflowEntities.Entities
             var commentsToQuestionsGenerator = new Faker<Comment>()
                 .RuleFor(r => r.Content, f => f.Lorem.Sentences())
                 .RuleFor(r => r.Rating, f => f.Random.Number(-5, 15))
-                .RuleFor(r => r.AuthorId, f => users[f.Random.Number(users.Count - 1)])
-                .RuleFor(r => r.QuestionId, f => questions[f.Random.Number(questions.Count - 1)])
+                .RuleFor(r => r.AuthorId, f => f.Random.ListItem(users))
+                .RuleFor(r => r.QuestionId, f => f.Random.ListItem(questions))
                 .RuleFor(r => r.Created, DateTime.Now);
 
             var commentsToQuestions = commentsToQuestionsGenerator.Generate(300);
@@ -99,8 +104,8 @@ namespace StackOverflowEntities.Entities
             var commentsToRepliesGenerator = new Faker<Comment>()
                 .RuleFor(r => r.Content, f => f.Lorem.Sentences())
                 .RuleFor(r => r.Rating, f => f.Random.Number(-5, 15))
-                .RuleFor(r => r.AuthorId, f => users[f.Random.Number(users.Count - 1)])
-                .RuleFor(r => r.ReplyId, f => replies[f.Random.Number(replies.Count - 1)])
+                .RuleFor(r => r.AuthorId, f => f.Random.ListItem(users))
+                .RuleFor(r => r.ReplyId, f => f.Random.ListItem(replies))
                 .RuleFor(r => r.Created, DateTime.Now);
 
             var commentsToReplies = commentsToRepliesGenerator.Generate(1000);
