@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Bogus;
+using Bogus.Extensions;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -21,8 +22,7 @@ namespace StackOverflowEntities.Entities
             var userGenerator = new Faker<User>()
                 .RuleFor(u => u.Name, f => f.Internet.UserName());
 
-            var usersCount = 250;
-            var users = userGenerator.Generate(usersCount);
+            var users = userGenerator.Generate(100);
 
             await dbContext.AddRangeAsync(users);
             await dbContext.SaveChangesAsync();
@@ -39,7 +39,7 @@ namespace StackOverflowEntities.Entities
             var tagMaxIndex = tags.Count - 1;
 
             var questionGenerator = new Faker<Question>()
-                .RuleFor(q => q.Title, f => f.Lorem.Sentence(15).Substring(0, 35) + "...?")
+                .RuleFor(q => q.Title, f => f.Lorem.Paragraphs(3, 10, " ").ClampLength(10, 80))
                 .RuleFor(q => q.Content, f => f.Lorem.Paragraphs(1, 25, "\n\n"))
                 .RuleFor(q => q.Rating, f => f.Random.Number(-5, 15))
                 .RuleFor(q => q.Author, f => users[f.Random.Number(users.Count - 1)])
@@ -65,7 +65,7 @@ namespace StackOverflowEntities.Entities
                 .RuleFor(r => r.Question, f => f.Random.ListItem(questions))
                 .RuleFor(r => r.Created, DateTime.Now);
 
-            var replies = replyGenerator.Generate(1000);
+            var replies = replyGenerator.Generate(1500);
 
             await dbContext.AddRangeAsync(replies);
             await dbContext.SaveChangesAsync();
@@ -109,7 +109,7 @@ namespace StackOverflowEntities.Entities
                 .RuleFor(r => r.ReplyId, f => f.Random.ListItem(replies))
                 .RuleFor(r => r.Created, DateTime.Now);
 
-            var commentsToReplies = commentsToRepliesGenerator.Generate(1000);
+            var commentsToReplies = commentsToRepliesGenerator.Generate(3500);
 
             await db.AddRangeAsync(commentsToReplies);
             await db.AddRangeAsync(commentsToQuestions);
