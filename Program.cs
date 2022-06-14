@@ -49,6 +49,8 @@ if (!dbContext.Tags.Any())
 }
 
 app.RegisterQuestionsEndpoints();
+app.RegisterTagsEndpoints();
+
 app.Run();
 
 
