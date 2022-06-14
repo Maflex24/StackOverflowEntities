@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using StackOverflowEntities.Entities;
@@ -59,7 +60,7 @@ namespace StackOverflowEntities
                         Id = q.Id, 
                         Rating = q.Rating, 
                         Replies = q.Replies.Count, 
-                        Title = q.Title, 
+                        Title = q.Title,
                         Tags = q.Tags
                     })
                     .ToListAsync();
@@ -79,38 +80,35 @@ namespace StackOverflowEntities
                     .Include(q => q.Comments)
                     .Include(q => q.Tags)
                     .Include(q => q.Author)
-                    .Select(q  => new
-                        {
-                            Id = q.Id,
-                            Title = q.Title,
-                            Author = q.Author.Name,
-                            Rating = q.Rating,
-                            Created = q.Created,
-                            LastUpdates = q.LastEdited,
-                            Content = q.Content,
-                            Tags = q.Tags.Select(t => t.Name),
-
-                        Replies = q.Replies.Select(r => new
+                    .Select(q  => new SingleQuestionDto()
+                    {
+                        Id = q.Id,
+                        Title = q.Title,
+                        Author = new AuthorDto(){Id = q.AuthorId, Name = q.Author.Name},
+                        Rating = q.Rating,
+                        Created = q.Created,
+                        LastUpdate = q.LastEdited,
+                        Tags = (List<TagDto>) q.Tags.Select(t => new TagDto(){Id = t.Id, Name = t.Name}),
+                        Content = q.Content,
+                        Replies = (List<QuestionReplyDto>) q.Replies.Select(r => new QuestionReplyDto()
                         {
                             Id = r.Id,
-                            Author = r.Author,
+                            Author = new AuthorDto() { Id = r.AuthorId, Name = r.Author.Name },
                             Rating = r.Rating,
                             Created = r.Created,
-                            LastUpdates = r.LastEdited,
-                            Content = r.Content,
-                            Comments = r.Comments
+                            LastUpdate = r.LastEdited,
+                            Content = r.Content
                         }),
-                        Comments = q.Comments.Select(c => new
+                        Comments = (List<CommentDto>) q.Comments.Select(c => new CommentDto()
                         {
                             Id = c.Id,
-                            Author = c.Author,
+                            Author = new AuthorDto() { Id = c.AuthorId, Name = c.Author.Name },
                             Rating = c.Rating,
                             Created = c.Created,
-                            LastUpdates = c.LastEdited,
-                            Content = c.Content
+                            LastUpdate = c.LastEdited,
+                            Content = c.Content,
                         })
-                    }
-                    )
+                    })
                     .FirstAsync(q => q.Id == questionId);
 
                 return result;
