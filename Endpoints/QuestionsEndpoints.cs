@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using StackOverflowEntities.Entities;
 using StackOverflowEntities.Entities.Dtos;
+using StackOverflowEntities.Migrations;
 
 namespace StackOverflowEntities
 {
@@ -77,18 +78,38 @@ namespace StackOverflowEntities
                     .Include(q => q.Replies)
                     .Include(q => q.Comments)
                     .Include(q => q.Tags)
-                    .Select(q => new
+                    .Include(q => q.Author)
+                    .Select(q  => new
                         {
                             Id = q.Id,
                             Title = q.Title,
-                            Content = q.Content,
-                            Author = q.Author,
+                            Author = q.Author.Name,
                             Rating = q.Rating,
                             Created = q.Created,
                             LastUpdates = q.LastEdited,
-                            Replies = q.Replies,
-                            Comments = q.Comments
-                        }
+                            Content = q.Content,
+                            Tags = q.Tags.Select(t => t.Name),
+
+                        Replies = q.Replies.Select(r => new
+                        {
+                            Id = r.Id,
+                            Author = r.Author,
+                            Rating = r.Rating,
+                            Created = r.Created,
+                            LastUpdates = r.LastEdited,
+                            Content = r.Content,
+                            Comments = r.Comments
+                        }),
+                        Comments = q.Comments.Select(c => new
+                        {
+                            Id = c.Id,
+                            Author = c.Author,
+                            Rating = c.Rating,
+                            Created = c.Created,
+                            LastUpdates = c.LastEdited,
+                            Content = c.Content
+                        })
+                    }
                     )
                     .FirstAsync(q => q.Id == questionId);
 
@@ -104,7 +125,23 @@ namespace StackOverflowEntities
                 question.AuthorId = questionPostModel.AuthorId;
                 question.Created = DateTime.Now;
 
+
                 await db.Questions.AddAsync(question);
+                await db.SaveChangesAsync();
+
+                return question;
+            }).WithTags("Questions");
+
+
+            app.MapPut("question", async (StackOverflowContext db, Guid QuestionId, string? title, string? content) =>
+            {
+                var question = await db.Questions
+                    .FirstAsync(q => q.Id == QuestionId);
+
+                if (title != null) question.Title = title;
+                if (content != null) question.Content = content;
+                question.LastEdited = DateTime.Now;
+
                 await db.SaveChangesAsync();
 
                 return question;
