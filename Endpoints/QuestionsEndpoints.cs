@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using StackOverflowEntities.Entities;
@@ -60,7 +61,7 @@ namespace StackOverflowEntities
                         Id = q.Id, 
                         Rating = q.Rating, 
                         Replies = q.Replies.Count, 
-                        Title = q.Title,
+                        Title = q.Title, 
                         Tags = q.Tags
                     })
                     .ToListAsync();
