@@ -12,8 +12,8 @@ namespace StackOverflowEntities.Entities
     {
         public Guid? ReplyId { get; set; }
         public Reply? Reply { get; set; }
-        public Guid? QuestionId { get; set; }
-        public Question? Question { get; set; }
+        public Guid QuestionId { get; set; }
+        public Question Question { get; set; }
     }
 
     public class CommentConfigure : IEntityTypeConfiguration<Comment>
@@ -26,7 +26,9 @@ namespace StackOverflowEntities.Entities
 
             builder.HasOne(q => q.Question)
                 .WithMany(q => q.Comments)
-                .HasForeignKey(c => c.QuestionId);
+                .HasForeignKey(c => c.QuestionId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
         }
     }
 }

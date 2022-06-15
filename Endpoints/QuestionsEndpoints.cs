@@ -107,6 +107,7 @@ namespace StackOverflowEntities
                             Rating = c.Rating,
                             Created = c.Created,
                             LastUpdate = c.LastEdited,
+                            ReplyId = c.ReplyId,
                             Content = c.Content,
                         })
                     })

@@ -97,7 +97,7 @@ namespace StackOverflowEntities.Entities
 
             var commentsToQuestions = commentsToQuestionsGenerator.Generate(300);
 
-            var replies = await db.Replies
+            var repliesIds = await db.Replies
                 .AsNoTracking()
                 .Select(r => r.Id)
                 .ToListAsync();
@@ -106,10 +106,26 @@ namespace StackOverflowEntities.Entities
                 .RuleFor(r => r.Content, f => f.Lorem.Sentences())
                 .RuleFor(r => r.Rating, f => f.Random.Number(-5, 15))
                 .RuleFor(r => r.AuthorId, f => f.Random.ListItem(users))
-                .RuleFor(r => r.ReplyId, f => f.Random.ListItem(replies))
+                .RuleFor(r => r.ReplyId, f => f.Random.ListItem(repliesIds))
                 .RuleFor(r => r.Created, DateTime.Now);
 
             var commentsToReplies = commentsToRepliesGenerator.Generate(3500);
+
+            var replies = await db.Replies
+                .AsNoTracking()
+                .Select(r => new
+                {
+                    r.QuestionId, r.Id
+                })
+                .ToListAsync();
+
+            foreach (var comment in commentsToReplies)
+            {
+                comment.QuestionId = replies
+                    .Where(r => r.Id == comment.ReplyId)
+                    .Select(r => r.QuestionId)
+                    .FirstOrDefault();
+            }
 
             await db.AddRangeAsync(commentsToReplies);
             await db.AddRangeAsync(commentsToQuestions);
