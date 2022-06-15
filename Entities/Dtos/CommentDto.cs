@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace StackOverflowEntities.Entities.Dtos
 {
@@ -14,5 +15,6 @@ namespace StackOverflowEntities.Entities.Dtos
         public DateTime Created { get; set; }
         public DateTime? LastUpdate { get; set; }
         public string Content { get; set; }
+        public Guid? ReplyId { get; set; }
     }
 }
