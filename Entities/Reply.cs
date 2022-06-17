@@ -8,20 +8,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace StackOverflowEntities.Entities
 {
-    public class Reply : QuestionModel
+    public class Reply : QuestionReplyCommentModel
     {
-        public List<Comment>? Comments { get; set; } = new List<Comment>();
-        public Guid QuestionId { get; set; }
-        public Question Question { get; set; }
+        public virtual Guid QuestionId { get; set; }
+        public virtual Question Question { get; set; }
+        public virtual List<Comment>? Comments { get; set; } = new List<Comment>();
     }
 
     public class ReplyConfiguration : IEntityTypeConfiguration<Reply>
     {
         public void Configure(EntityTypeBuilder<Reply> builder)
         {
-            builder.HasOne(q => q.Question)
+            builder.HasOne(r => r.Question)
                 .WithMany(q => q.Replies)
-                .HasForeignKey(k => k.QuestionId)
+                .HasForeignKey(r => r.QuestionId)
                 .OnDelete(DeleteBehavior.ClientCascade);
         }
     }

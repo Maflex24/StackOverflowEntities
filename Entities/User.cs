@@ -13,9 +13,9 @@ namespace StackOverflowEntities.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public List<Question>? Questions { get; set; } = new List<Question>();
-        public List<Reply>? Replies { get; set; } = new List<Reply>();
-        public List<Comment>? Comments { get; set; } = new List<Comment>();
+        public virtual List<Question>? Questions { get; set; } = new List<Question>();
+        public virtual List<Reply>? Replies { get; set; } = new List<Reply>();
+        public virtual List<Comment>? Comments { get; set; } = new List<Comment>();
 
     }
 

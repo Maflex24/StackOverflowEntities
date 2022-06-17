@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StackOverflowEntities.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace StackOverflowEntities.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,7 +27,7 @@ namespace StackOverflowEntities.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,40 +35,36 @@ namespace StackOverflowEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionsRepliesComments",
+                name: "QuestionReplyCommentModels",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ReplyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
                     Reply_QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionModels", x => x.Id);
+                    table.PrimaryKey("PK_QuestionReplyCommentModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionModels_QuestionModels_QuestionId",
+                        name: "FK_QuestionReplyCommentModels_QuestionReplyCommentModels_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "QuestionsRepliesComments",
+                        principalTable: "QuestionReplyCommentModels",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_QuestionModels_QuestionModels_Reply_QuestionId",
+                        name: "FK_QuestionReplyCommentModels_QuestionReplyCommentModels_Reply_QuestionId",
                         column: x => x.Reply_QuestionId,
-                        principalTable: "QuestionsRepliesComments",
+                        principalTable: "QuestionReplyCommentModels",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_QuestionModels_QuestionModels_ReplyId",
-                        column: x => x.ReplyId,
-                        principalTable: "QuestionsRepliesComments",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_QuestionModels_Users_AuthorId",
+                        name: "FK_QuestionReplyCommentModels_Users_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -86,9 +82,9 @@ namespace StackOverflowEntities.Migrations
                 {
                     table.PrimaryKey("PK_QuestionTag", x => new { x.QuestionsId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_QuestionTag_QuestionModels_QuestionsId",
+                        name: "FK_QuestionTag_QuestionReplyCommentModels_QuestionsId",
                         column: x => x.QuestionsId,
-                        principalTable: "QuestionsRepliesComments",
+                        principalTable: "QuestionReplyCommentModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -100,24 +96,19 @@ namespace StackOverflowEntities.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionModels_AuthorId",
-                table: "QuestionsRepliesComments",
+                name: "IX_QuestionReplyCommentModels_AuthorId",
+                table: "QuestionReplyCommentModels",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionModels_QuestionId",
-                table: "QuestionsRepliesComments",
+                name: "IX_QuestionReplyCommentModels_QuestionId",
+                table: "QuestionReplyCommentModels",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionModels_Reply_QuestionId",
-                table: "QuestionsRepliesComments",
+                name: "IX_QuestionReplyCommentModels_Reply_QuestionId",
+                table: "QuestionReplyCommentModels",
                 column: "Reply_QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionModels_ReplyId",
-                table: "QuestionsRepliesComments",
-                column: "ReplyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionTag_TagsId",
@@ -131,7 +122,7 @@ namespace StackOverflowEntities.Migrations
                 name: "QuestionTag");
 
             migrationBuilder.DropTable(
-                name: "QuestionsRepliesComments");
+                name: "QuestionReplyCommentModels");
 
             migrationBuilder.DropTable(
                 name: "Tags");
