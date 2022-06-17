@@ -1,0 +1,10 @@
+# StackOverflowEntities
+It's training project of learning Entity Framework. Goal was to recreate basic functions of [Stack Overflow](https://stackoverflow.com/questions).  
+This solution is much more simple, but goal was to get most common functionalities.
+
+# Some basic endpoints:
+## Questions
+|HTPP Verb|Path|Accept|Return|
+|---------|----|------|------|
+|Get |questions |pageNumber, resultsPerPage, searchPhrase (optional), orderBy (optional), orderByDesc(bool, optional) | Page model, with questions, information about|  
+
