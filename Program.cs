@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackOverflowEntities;
+using StackOverflowEntities.Endpoints;
 using StackOverflowEntities.Entities;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -52,6 +53,7 @@ app.RegisterQuestionsEndpoints();
 app.RegisterTagsEndpoints();
 app.RegisterReplyEndpoints();
 app.RegisterCommentEndpoints();
+app.RegisterUsersEndpoints();
 
 app.Run();
 
