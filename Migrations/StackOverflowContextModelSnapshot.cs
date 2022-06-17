@@ -52,7 +52,7 @@ namespace StackOverflowEntities.Migrations
                     b.ToView("View_Discriminator");
                 });
 
-            modelBuilder.Entity("StackOverflowEntities.Entities.QuestionModel", b =>
+            modelBuilder.Entity("StackOverflowEntities.Entities.QuestionReplyCommentModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,9 +80,9 @@ namespace StackOverflowEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionModels");
+                    b.ToTable("QuestionReplyCommentModels");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("QuestionModel");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("QuestionReplyCommentModel");
                 });
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Tag", b =>
@@ -121,7 +121,7 @@ namespace StackOverflowEntities.Migrations
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Comment", b =>
                 {
-                    b.HasBaseType("StackOverflowEntities.Entities.QuestionModel");
+                    b.HasBaseType("StackOverflowEntities.Entities.QuestionReplyCommentModel");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -138,7 +138,7 @@ namespace StackOverflowEntities.Migrations
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Question", b =>
                 {
-                    b.HasBaseType("StackOverflowEntities.Entities.QuestionModel");
+                    b.HasBaseType("StackOverflowEntities.Entities.QuestionReplyCommentModel");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -152,7 +152,7 @@ namespace StackOverflowEntities.Migrations
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Reply", b =>
                 {
-                    b.HasBaseType("StackOverflowEntities.Entities.QuestionModel");
+                    b.HasBaseType("StackOverflowEntities.Entities.QuestionReplyCommentModel");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier")

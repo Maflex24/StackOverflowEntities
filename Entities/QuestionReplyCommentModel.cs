@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace StackOverflowEntities.Entities
 {
-    public abstract class QuestionModel
+    public abstract class QuestionReplyCommentModel
     {
         public Guid Id { get; set; }
         public string Content { get; set; }
-
         public Guid AuthorId { get; set; }
-        public User Author { get; set; }
+        public virtual User Author { get; set; }
         public int Rating { get; set; }
         public DateTime Created { get; set; }
         public DateTime? LastEdited { get; set; }
