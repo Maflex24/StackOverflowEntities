@@ -20,6 +20,7 @@ namespace StackOverflowEntities.Entities
         public DbSet<Reply> Replies { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Vote> Votes { get; set; }
         public DbSet<DiscriminatorView> DiscriminatorViews { get; set; }
 
 

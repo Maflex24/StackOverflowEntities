@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackOverflowEntities.Entities;
 
@@ -11,9 +12,10 @@ using StackOverflowEntities.Entities;
 namespace StackOverflowEntities.Migrations
 {
     [DbContext(typeof(StackOverflowContext))]
-    partial class StackOverflowContextModelSnapshot : ModelSnapshot
+    [Migration("20220617161057_Vote")]
+    partial class Vote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,10 +123,6 @@ namespace StackOverflowEntities.Migrations
 
             modelBuilder.Entity("StackOverflowEntities.Entities.Vote", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ElementId")
                         .HasColumnType("uniqueidentifier");
 
@@ -133,8 +131,6 @@ namespace StackOverflowEntities.Migrations
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
 
                     b.ToTable("Votes");
                 });
