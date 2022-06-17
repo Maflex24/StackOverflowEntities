@@ -38,6 +38,7 @@ namespace StackOverflowEntities
             {
                 var reply = db.Replies.FirstOrDefault(r => r.Id == replyId);
                 reply.Content = content;
+                reply.LastEdited = DateTime.Now;
 
                 await db.SaveChangesAsync();
 
@@ -48,7 +49,6 @@ namespace StackOverflowEntities
                 var newReply = new Reply()
                 {
                     Id = replyId,
-                    LastEdited = DateTime.Now
                 };
 
                 db.Replies.Remove(newReply);
